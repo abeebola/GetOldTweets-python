@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-import sys, getopt, datetime, codecs
+import codecs
+import getopt
+import sys
 
 if sys.version_info[0] < 3:
     from got.manager.TweetCriteria import TweetCriteria
@@ -21,65 +23,66 @@ def main(argv):
 
         return
 
-    try:
-        opts, args = getopt.getopt(argv, "", (
+    # try:
+    opts, args = getopt.getopt(argv, "", (
         "username=", "near=", "within=", "since=", "until=", "querysearch=", "toptweets", "maxtweets=", "output="))
 
-        tweetCriteria = TweetCriteria()
-        outputFileName = "output_got.csv"
+    tweetCriteria = TweetCriteria()
+    outputFileName = "output_got.csv"
 
-        for opt, arg in opts:
-            if opt == '--username':
-                tweetCriteria.username = arg
+    for opt, arg in opts:
+        if opt == '--username':
+            tweetCriteria.username = arg
 
-            elif opt == '--since':
-                tweetCriteria.since = arg
+        elif opt == '--since':
+            tweetCriteria.since = arg
 
-            elif opt == '--until':
-                tweetCriteria.until = arg
+        elif opt == '--until':
+            tweetCriteria.until = arg
 
-            elif opt == '--querysearch':
-                tweetCriteria.querySearch = arg
+        elif opt == '--querysearch':
+            tweetCriteria.querySearch = arg
 
-            elif opt == '--toptweets':
-                tweetCriteria.topTweets = True
+        elif opt == '--toptweets':
+            tweetCriteria.topTweets = True
 
-            elif opt == '--maxtweets':
-                tweetCriteria.maxTweets = int(arg)
+        elif opt == '--maxtweets':
+            tweetCriteria.maxTweets = int(arg)
 
-            elif opt == '--near':
-                tweetCriteria.near = '"' + arg + '"'
+        elif opt == '--near':
+            tweetCriteria.near = '"' + arg + '"'
 
-            elif opt == '--within':
-                tweetCriteria.within = '"' + arg + '"'
+        elif opt == '--within':
+            tweetCriteria.within = '"' + arg + '"'
 
-            elif opt == '--within':
-                tweetCriteria.within = '"' + arg + '"'
+        elif opt == '--within':
+            tweetCriteria.within = '"' + arg + '"'
 
-            elif opt == '--output':
-                outputFileName = arg
+        elif opt == '--output':
+            outputFileName = arg
 
-        outputFile = codecs.open(outputFileName, "w+", "utf-8")
+    outputFile = codecs.open(outputFileName, "w+", "utf-8")
 
-        outputFile.write('username;date;retweets;favorites;text;geo;mentions;hashtags;id;permalink')
+    outputFile.write('username;date;retweets;favorites;text;geo;mentions;hashtags;id;permalink')
 
-        print('Searching...\n')
+    print('Searching...\n')
 
-        def receiveBuffer(tweets):
-            for t in tweets:
-                outputFile.write(('\n%s;%s;%d;%d;"%s";%s;%s;%s;"%s";%s' % (
+    def receiveBuffer(tweets):
+        for t in tweets:
+            outputFile.write(('\n%s;%s;%d;%d;"%s";%s;%s;%s;"%s";%s' % (
                 t.username, t.date.strftime("%Y-%m-%d %H:%M"), t.retweets, t.favorites, t.text, t.geo, t.mentions,
                 t.hashtags, t.id, t.permalink)))
-            outputFile.flush();
-            print('More %d saved on file...\n' % len(tweets))
+        outputFile.flush();
+        print('More %d saved on file...\n' % len(tweets))
 
-        TweetManager.getTweets(tweetCriteria, receiveBuffer)
+    TweetManager.getTweets(tweetCriteria, receiveBuffer)
 
-    except arg:
-        print('Arguments parser error, try -h' + arg)
-    finally:
-        outputFile.close()
-        print('Done. Output file generated "%s".' % outputFileName)
+    # except Exception as e:
+    #     print(e)
+    #     print('Arguments parser error, try -h' + arg)
+    # finally:
+    outputFile.close()
+    print('Done. Output file generated "%s".' % outputFileName)
 
 
 if __name__ == '__main__':
