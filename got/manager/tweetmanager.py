@@ -1,6 +1,15 @@
-import urllib,urllib2,json,re,datetime,sys,cookielib
-from .. import models
+import cookielib
+import datetime
+import json
+import re
+import sys
+import urllib
+import urllib2
+
 from pyquery import PyQuery
+
+from .. import models
+
 
 class TweetManager:
 	
